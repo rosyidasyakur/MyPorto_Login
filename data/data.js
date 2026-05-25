@@ -13,6 +13,12 @@ const pool = new Pool({
     password : process.env.DB_PASSWORD,
 });
 
+//middleware
+app.use (express.urlencoded({ extended : true }));
+app.use (express.json());
+
+
+
 //ini route nya
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname , '..', 'public', 'depan.html'));
@@ -26,11 +32,6 @@ app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname , '..', 'public', 'dashboard.html'));
 });
 
-
-
-//middleware
-app.use (express.urlencoded({ extended : true }));
-app.use (express.json());
 
 //endpoint nya
 
