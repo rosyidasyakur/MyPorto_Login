@@ -1,4 +1,4 @@
-# MyLogin 🔐
+# MyLogin coy
 
 Sistem autentikasi pengguna berbasis web dengan fitur registrasi dan login yang aman.
 
@@ -55,3 +55,6 @@ Sistem autentikasi pengguna berbasis web dengan fitur registrasi dan login yang 
 ## Catatan
 
 File `.env` tidak ikut di-upload ke GitHub demi keamanan. Pastikan kamu membuat file `.env` sendiri sebelum menjalankan project ini.
+Project ini dibuat sebagai bagian dari proses belajar 
+pengembangan web. Masih dalam tahap pengembangan dan 
+akan terus ditingkatkan.
