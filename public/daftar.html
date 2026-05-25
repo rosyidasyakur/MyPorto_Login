@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Akun — MyLogin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #F7F5F0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: #E8E0D5;
+            top: -120px;
+            right: -100px;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: #DED6C8;
+            bottom: -80px;
+            left: -60px;
+            z-index: 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 380px;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(0,0,0,0.07);
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #A09080;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-size: 26px;
+            font-weight: 600;
+            color: #1A1510;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #8A8070;
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #5A5248;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #E0D8CE;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            color: #1A1510;
+            background: #FDFCFB;
+            margin-bottom: 0.5rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: #C4A882;
+            box-shadow: 0 0 0 3px rgba(196, 168, 130, 0.15);
+        }
+
+        input::placeholder { color: #C0B8AE; }
+
+        /* Password strength bar */
+        .strength-wrap { margin-bottom: 1.2rem; }
+
+        .strength-bar {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 4px;
+        }
+
+        .strength-seg {
+            height: 3px;
+            flex: 1;
+            border-radius: 2px;
+            background: #EDE6DC;
+            transition: background 0.3s;
+        }
+
+        .strength-seg.weak   { background: #E24B4A; }
+        .strength-seg.medium { background: #EF9F27; }
+        .strength-seg.strong { background: #639922; }
+
+        .strength-label {
+            font-size: 11px;
+            color: #A09080;
+            min-height: 16px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 11px;
+            background: #2C2420;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            margin-bottom: 1.2rem;
+            letter-spacing: 0.02em;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn:hover { background: #3D3530; }
+        .btn:active { transform: scale(0.99); }
+
+        .footer-text {
+            text-align: center;
+            font-size: 13px;
+            color: #8A8070;
+        }
+
+        .footer-text a {
+            color: #8B6F47;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-text a:hover { text-decoration: underline; }
+
+        /* Notifikasi */
+        .notif {
+            display: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 1rem;
+        }
+
+        .notif.error {
+            background: #FCEBEB;
+            color: #A32D2D;
+            border: 1px solid #F7C1C1;
+        }
+
+        .notif.success {
+            background: #EAF3DE;
+            color: #3B6D11;
+            border: 1px solid #C0DD97;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="eyebrow">MyLogin</div>
+    <h1>Buat akun baru</h1>
+    <p class="subtitle">Gratis dan hanya butuh beberapa detik</p>
+
+    <div class="notif" id="notif"></div>
+
+    <form action="/data_user" method="POST" id="form-daftar">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required placeholder="Pilih username unik">
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required placeholder="Min. 8 karakter" oninput="cekKekuatan(this.value)">
+
+        <div class="strength-wrap">
+            <div class="strength-bar">
+                <div class="strength-seg" id="s1"></div>
+                <div class="strength-seg" id="s2"></div>
+                <div class="strength-seg" id="s3"></div>
+                <div class="strength-seg" id="s4"></div>
+            </div>
+            <div class="strength-label" id="strength-label"></div>
+        </div>
+
+        <button type="submit" class="btn">Daftar sekarang</button>
+    </form>
+
+    <p class="footer-text">Sudah punya akun? <a href="/">Masuk di sini</a></p>
+</div>
+
+<script>
+    function cekKekuatan(val) {
+        const segs = ['s1','s2','s3','s4'].map(id => document.getElementById(id));
+        const label = document.getElementById('strength-label');
+
+        let score = 0;
+        if (val.length >= 6)  score++;
+        if (val.length >= 10) score++;
+        if (/[A-Z]/.test(val) || /[0-9]/.test(val)) score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
+
+        const levels = ['', 'weak', 'medium', 'medium', 'strong'];
+        const labels = ['', 'Lemah', 'Cukup', 'Bagus', 'Kuat'];
+
+        segs.forEach((s, i) => {
+            s.className = 'strength-seg';
+            if (i < score) s.classList.add(levels[score]);
+        });
+
+        label.textContent = val.length > 0 ? 'Kekuatan: ' + labels[score] : '';
+    }
+</script>
+
+</body>
+</html>

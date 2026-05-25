@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - MyLogin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f0f0ee;
+      --card: #ffffff;
+      --dark: #1a1a1a;
+      --gray: #6b6b6b;
+      --light-gray: #e4e4e2;
+      --accent: #1a1a1a;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg);
+      min-height: 100vh;
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* Dekorasi lingkaran seperti halaman login */
+    .circle-deco {
+      position: fixed;
+      border-radius: 50%;
+      background: #d1d1ce;
+      opacity: 0.5;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .circle-deco.top-right { width: 320px; height: 320px; top: -80px; right: -80px; }
+    .circle-deco.bottom-left { width: 220px; height: 220px; bottom: -60px; left: -60px; }
+
+    /* Navbar */
+    nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 48px;
+      background: var(--card);
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .nav-brand {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--dark);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-logout {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 20px;
+      border: 1.5px solid var(--dark);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--dark);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-logout:hover {
+      background: var(--dark);
+      color: white;
+    }
+
+    /* Main content */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 60px auto;
+      padding: 0 24px;
+    }
+
+    .greeting {
+      margin-bottom: 40px;
+    }
+
+    .greeting .label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 8px;
+    }
+
+    .greeting h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 42px;
+      font-weight: 400;
+      color: var(--dark);
+      line-height: 1.15;
+    }
+
+    .greeting p {
+      margin-top: 10px;
+      font-size: 15px;
+      color: var(--gray);
+    }
+
+    /* Cards grid */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 28px 24px;
+      border: 1px solid var(--light-gray);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+    }
+
+    .card .card-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 12px;
+    }
+
+    .card .card-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px;
+      color: var(--dark);
+    }
+
+    .card .card-sub {
+      font-size: 13px;
+      color: var(--gray);
+      margin-top: 6px;
+    }
+
+    /* Info card besar */
+    .card-wide {
+      background: var(--dark);
+      color: white;
+      border-radius: 12px;
+      padding: 32px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: none;
+    }
+
+    .card-wide .info h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .card-wide .info p {
+      font-size: 14px;
+      color: #aaa;
+      max-width: 360px;
+      line-height: 1.6;
+    }
+
+    .card-wide .badge {
+      background: white;
+      color: var(--dark);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 16px 20px; }
+      main { margin: 32px auto; }
+      .greeting h1 { font-size: 30px; }
+      .cards { grid-template-columns: 1fr; }
+      .card-wide { flex-direction: column; gap: 20px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="circle-deco top-right"></div>
+  <div class="circle-deco bottom-left"></div>
+
+  <nav>
+    <span class="nav-brand">MyLogin</span>
+    <div class="nav-right">
+      <div class="avatar" id="avatarInitial">U</div>
+      <a href="/" class="btn-logout">Keluar</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="greeting">
+      <div class="label">Dashboard</div>
+      <h1>Selamat datang,<br/><span id="usernameDisplay">Pengguna</span>!</h1>
+      <p>Kamu berhasil masuk ke akun kamu.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Status Akun</div>
+        <div class="card-value">Aktif</div>
+        <div class="card-sub">Akun terverifikasi</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Bergabung</div>
+        <div class="card-value" id="joinDate">—</div>
+        <div class="card-sub">Tanggal registrasi</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Sesi Login</div>
+        <div class="card-value">1</div>
+        <div class="card-sub">Sesi aktif sekarang</div>
+      </div>
+    </div>
+
+    <div class="card-wide">
+      <div class="info">
+        <h3>Akun kamu sudah siap!</h3>
+        <p>Ini adalah halaman dashboard kamu. Kamu bisa mengembangkan fitur lebih lanjut di sini sesuai kebutuhanmu.</p>
+      </div>
+      <div class="badge">✓ Login Berhasil</div>
+    </div>
+  </main>
+
+  <script>
+    // Ambil username dari sessionStorage/localStorage kalau ada
+    const username = sessionStorage.getItem('username') || localStorage.getItem('username');
+    if (username) {
+      document.getElementById('usernameDisplay').textContent = username;
+      document.getElementById('avatarInitial').textContent = username.charAt(0).toUpperCase();
+    }
+
+    // Tanggal hari ini sebagai contoh
+    const today = new Date();
+    document.getElementById('joinDate').textContent = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  </script>
+
+</body>
+</html>
