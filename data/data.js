@@ -69,7 +69,7 @@ try {
     
     const queryText = 'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id';
     const result = await pool.query(queryText, [username, hashedPassword]);
-    res.status(201).send('User berhasil didaftarkan!');
+    res.redirect('/');
 } catch (error) {
     console.error('Error saat registrasi:', error);
     res.status(500).send('Terjadi kesalahan server.');
